@@ -1,0 +1,40 @@
+<section class="todo-container">
+  <h1>待辦事項</h1>
+
+  <!-- 新增區域 -->
+  <div class="add-todo-form">
+    <input
+      type="text"
+      class="todo-input"
+      placeholder="輸入待辦事項標題..."
+      [value]="newTodoTitle()"
+      (input)="newTodoTitle.set($any($event.target).value)"
+      (keydown)="onInputKeydown($event)"
+    />
+    <button
+      type="button"
+      class="add-btn"
+      (click)="addTodo()"
+      [disabled]="!newTodoTitle().trim()"
+    >
+      新增
+    </button>
+  </div>
+
+  <!-- 待辦事項列表 -->
+  <ul class="todo-list">
+    @for (todo of todoList(); track trackById($index, todo)) {
+      <li class="todo-item">
+        <div class="todo-content">
+          <span class="todo-title">{{ todo.title }}</span>
+          <span class="todo-date">{{ todo.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+        </div>
+        <div class="todo-actions">
+          <!-- 編輯與刪除按鈕將在後續實作 -->
+        </div>
+      </li>
+    } @empty {
+      <li class="empty-message">目前沒有待辦事項</li>
+    }
+  </ul>
+</section>
