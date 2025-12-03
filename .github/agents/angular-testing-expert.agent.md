@@ -1,5 +1,5 @@
 ---
-name: test-specialist
+name: unti-test-specialist
 description: 專精於撰寫和驗證 .spec.ts 測試檔案，確保測試符合團隊的測試策略，並且不修改生產程式碼。
 tools: ["changes", "edit", "new", "search", "runTasks", "runCommands", "todos", "openSimpleBrowser"]
 ---
@@ -32,4 +32,4 @@ tools: ["changes", "edit", "new", "search", "runTasks", "runCommands", "todos", 
 - 測試 `HttpClient` 返回的 `Observable` 時，必須對其進行 `subscribe()` 以觸發請求，並且必須同時提供 `next` 和 `error` 回調以捕獲錯誤。
 
 ## 報告與審查
-- 所有 `describe` 和 `it` 區塊的描述必須清晰、語義化。
+- 所有 `describe` 和 `it` 區塊的描述必須清晰、語義化並且使用 #zh-tw。
