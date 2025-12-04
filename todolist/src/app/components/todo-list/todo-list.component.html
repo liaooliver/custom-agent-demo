@@ -25,13 +25,53 @@
   <ul class="todo-list">
     @for (todo of todoList(); track trackById($index, todo)) {
       <li class="todo-item">
-        <div class="todo-content">
-          <span class="todo-title">{{ todo.title }}</span>
-          <span class="todo-date">{{ todo.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}</span>
-        </div>
-        <div class="todo-actions">
-          <!-- 編輯與刪除按鈕將在後續實作 -->
-        </div>
+        @if (editingId() === todo.id) {
+          <!-- 編輯模式 -->
+          <div class="todo-content">
+            <input
+              type="text"
+              class="todo-edit-input"
+              [value]="editTitle()"
+              (input)="editTitle.set($any($event.target).value)"
+              (keydown)="onEditKeydown($event, todo.id)"
+              autofocus
+            />
+            <span class="todo-date">{{ todo.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+          </div>
+          <div class="todo-actions">
+            <button
+              type="button"
+              class="save-btn"
+              (click)="saveEdit(todo.id)"
+              [disabled]="!editTitle().trim()"
+            >
+              儲存
+            </button>
+            <button
+              type="button"
+              class="cancel-btn"
+              (click)="cancelEdit()"
+            >
+              取消
+            </button>
+          </div>
+        } @else {
+          <!-- 一般顯示模式 -->
+          <div class="todo-content">
+            <span class="todo-title">{{ todo.title }}</span>
+            <span class="todo-date">{{ todo.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+          </div>
+          <div class="todo-actions">
+            <button
+              type="button"
+              class="edit-btn"
+              (click)="startEdit(todo.id, todo.title)"
+            >
+              編輯
+            </button>
+            <!-- 刪除按鈕將在後續實作 -->
+          </div>
+        }
       </li>
     } @empty {
       <li class="empty-message">目前沒有待辦事項</li>

@@ -22,6 +22,12 @@ export class TodoListComponent {
   /** 待辦事項列表（來自 Service） */
   protected readonly todoList = this.todoService.todoList;
 
+  /** 編輯模式中的待辦事項 ID */
+  protected readonly editingId = signal<string | null>(null);
+
+  /** 編輯中的標題值 */
+  protected readonly editTitle = signal('');
+
   /**
    * 新增待辦事項
    */
@@ -54,5 +60,52 @@ export class TodoListComponent {
    */
   protected trackById(_index: number, item: { id: string }): string {
     return item.id;
+  }
+
+  /**
+   * 進入編輯模式
+   * @param id 待辦事項的唯一識別碼
+   * @param currentTitle 待辦事項的目前標題
+   */
+  protected startEdit(id: string, currentTitle: string): void {
+    this.editingId.set(id);
+    this.editTitle.set(currentTitle);
+  }
+
+  /**
+   * 取消編輯
+   */
+  protected cancelEdit(): void {
+    this.editingId.set(null);
+    this.editTitle.set('');
+  }
+
+  /**
+   * 儲存編輯
+   * @param id 待辦事項的唯一識別碼
+   */
+  protected saveEdit(id: string): void {
+    const newTitle = this.editTitle();
+    if (!newTitle.trim()) {
+      return;
+    }
+
+    if (this.todoService.updateTodo(id, newTitle)) {
+      this.editingId.set(null);
+      this.editTitle.set('');
+    }
+  }
+
+  /**
+   * 處理編輯框的鍵盤事件
+   * @param event 鍵盤事件
+   * @param id 待辦事項的唯一識別碼
+   */
+  protected onEditKeydown(event: KeyboardEvent, id: string): void {
+    if (event.key === 'Enter') {
+      this.saveEdit(id);
+    } else if (event.key === 'Escape') {
+      this.cancelEdit();
+    }
   }
 }

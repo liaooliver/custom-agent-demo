@@ -44,6 +44,36 @@ export class TodoService {
   }
 
   /**
+   * 更新待辦事項標題
+   * @param id 待辦事項的唯一識別碼
+   * @param newTitle 新的標題
+   * @returns 更新成功回傳 true，否則回傳 false
+   */
+  updateTodo(id: string, newTitle: string): boolean {
+    const trimmedTitle = newTitle.trim();
+    if (!trimmedTitle) {
+      return false;
+    }
+
+    const todoList = this._todoList();
+    const index = todoList.findIndex(todo => todo.id === id);
+    if (index === -1) {
+      return false;
+    }
+
+    const updatedList = [...todoList];
+    updatedList[index] = {
+      ...updatedList[index],
+      title: trimmedTitle
+    };
+
+    this._todoList.set(updatedList);
+    this.saveToStorage();
+
+    return true;
+  }
+
+  /**
    * 從 localStorage 載入待辦事項列表
    * @returns 待辦事項陣列
    */
